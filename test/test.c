@@ -4,13 +4,13 @@
 // #include "lib/utf8.h"
 #include <errno.h>
 #include <stdio.h>
-#ifdef _WIN32
+#ifndef __linux__
 #include <Windows.h>
 #include <locale.h>
 #endif
 int main() {
 
-#ifdef _WIN32
+#ifndef __linux__
 	setlocale(LC_ALL, "UTF-8");
 	SetConsoleOutputCP(CP_UTF8);
 #endif
@@ -18,8 +18,6 @@ int main() {
         j2string stringy = j2.string.create.st("🍌👍");
         printf("[%d]%s\n", J2_STRING_INFO(stringy)->length, stringy);
 	// printf(stringy);
-	setlocale(LC_ALL, "UTF-8");
-	SetConsoleOutputCP(CP_UTF8);
 	// setvbuf(stdout, nullptr, _IOFBF, 1000);
 	// printf("%s", stringy);
         int a = j2.string.noutf8.ccpy(&stringy, "šššš");
