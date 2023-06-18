@@ -1,6 +1,7 @@
 #include "../string.h"
+
 #ifdef __J2_DEV__
-#include "../../../../viwerr/viwerr.h"
+#include "../../../ext/viwerr/viwerr.h"
 #endif
 long
 j2string_format(

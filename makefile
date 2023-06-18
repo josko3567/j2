@@ -1,7 +1,12 @@
+ifeq ($(OS),Windows_NT)     # is Windows_NT on XP, 2000, 7, Vista, 10...
+	SHELL := powershell.exe
+	.SHELLFLAGS := -Command
+endif
+
 STATIC=j2.a
 
 # Debug mode includes viwerr.h and -D__J2_DEV__
-DEBUG  = 
+DEBUG  = t
 # Debug/release flags...
 DFLAGS =
 # Viwerr library home directory...
@@ -10,8 +15,23 @@ ifeq ($(DEBUG), f)
 	VIWERR = 
 	DFLAGS = -O3
 else
-	VIWERR =../viwerr/viwerr.a
+	ifeq ($(OS),Windows_NT)     # is Windows_NT on XP, 2000, 7, Vista, 10...
+		VIWERR = ext/viwerr/viwerr.lib
+	else
+		VIWERR = ext/viwerr/viwerr.a
+	endif
 	DFLAGS = -g -D__J2_DEV__
+endif
+
+EXECUTE_TEST =
+ifeq ($(OS),Windows_NT)     # is Windows_NT on XP, 2000, 7, Vista, 10...
+    EXECUTE_TEST = ./test/a.exe
+    STATIC = j2.lib
+    REMOVE = Get-ChildItem * -Include *.o, *.lib, *.exe -Recurse | Remove-Item
+else
+    EXECUTE_TEST = ./test/a.out
+    STATIC = j2.a
+    REMOVE = rm -f $(OBJ) $(STATIC)
 endif
 
 # Compiler
@@ -22,7 +42,7 @@ CFLAGS = -Wall -Wextra -Wpedantic \
 	 -Wformat=2 -Wno-unused-parameter -Wshadow \
 	 -Wwrite-strings -Wstrict-prototypes -Wold-style-definition \
 	 -Wredundant-decls -Wnested-externs -Wmissing-include-dirs \
-	 -pipe -std=c99
+	 -pipe -std=c2x
 
 
 LIBS = ./lib/string/src
@@ -45,15 +65,15 @@ $(VIWERR):
 	make -C ext/viwerr
 
 .PHONY: clean
-clean:
-	rm -f $(OBJ) $(STATIC)
+clean: 
+	@$(REMOVE)
 
 
 .PHONY: test
 test: $(STATIC)
 	@echo "[Running test/test.c]"
-	@$(CC) -lm -g test/test.c -o test/a.out $(STATIC) ../viwerr/viwerr.a && \
-	./test/a.out
+	@$(CC) -lm -g test/test.c -o $(EXECUTE_TEST) $(STATIC) $(VIWERR)
+	@$(EXECUTE_TEST)
 
 .PHONY: rebuild
 rebuild: clean test

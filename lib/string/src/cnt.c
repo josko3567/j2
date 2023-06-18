@@ -50,6 +50,10 @@
 #include <stdlib.h>
 #include <errno.h>
 
+#ifdef __J2_DEV__
+#include "../../../ext/viwerr/viwerr.h"
+#endif
+
 /**
  * @brief 
  * count character

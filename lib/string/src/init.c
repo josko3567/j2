@@ -49,7 +49,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
- 
+
+#ifdef __J2_DEV__
+#include "../../../ext/viwerr/viwerr.h"
+#endif
+
 /**
  * @fn @c j2string_allocate(1)
  * 
@@ -275,8 +279,8 @@ j2string_normalize_param(
         if(parameters.max <= 0)                        
                 parameters.max = J2_STRING_MAX_SIZE;   
 
-        if(parameters.padding < 0)                     
-                parameters.padding = 0;      
+        // if(parameters.padding < 0)                     
+        //         parameters.padding = 0;      
 
         if(length <= 0)
                 length = 1;
@@ -390,11 +394,13 @@ j2string_init(
 
         // Fill the string up.
         struct j2string_st * info = J2_STRING_REACH_FOR_STRUCT(string);
+
         info->length = j2string_utf8_strcpy_sn(
                 string, cstr, info->allocated, &info->filled
         );
 
         return string;
+        // return NULL;
 
 }
 

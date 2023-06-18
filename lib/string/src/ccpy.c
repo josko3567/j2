@@ -51,7 +51,7 @@
 #include <errno.h>
 
 #ifdef __J2_DEV__
-#include "../../../../viwerr/viwerr.h"
+#include "../../../ext/viwerr/viwerr.h"
 #endif
 
 /*******************************************************************************

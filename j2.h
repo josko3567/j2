@@ -186,7 +186,7 @@ struct j2_interface{
                                 const char * cstr);  
                       j2string (*dy)( 
                                 const char * cstr);  
-                } new;
+                } create;
                 // long (*rchrs)(
                 //         const_j2string string,
                 //         unsigned char c,
@@ -273,8 +273,8 @@ _j2()
                 
                 /// @a String_setup:
                 interface->string.init   = &j2string_init;
-                interface->string.new.st = &j2string_new_st;
-                interface->string.new.dy = &j2string_new_dy;
+                interface->string.create.st = &j2string_new_st;
+                interface->string.create.dy = &j2string_new_dy;
 
                 interface->string.ccpy   = &j2string_ccpy;
                 interface->string.cpy    = &j2string_cpy;

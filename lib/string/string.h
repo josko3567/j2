@@ -158,7 +158,7 @@
 #include <stdint.h>
 
 #ifdef __J2_DEV__
-#include "ext/viwerr/viwerr.h"
+#include "../../ext/viwerr/viwerr.h"
 #endif
 
 #include "../ieee1541.h"
@@ -243,7 +243,7 @@ struct j2string_st{
          * Ensures (somewhat) the function that it is reading into
          * a valid j2string_st by being set to 0xDEAFC0DE.
          */
-        unsigned long ensure; /** Constant 0xDEAFC0DE always */
+        size_t ensure; /** Constant 0xDEAFC0DE always */
 
 };
 
@@ -315,7 +315,7 @@ typedef struct j2string_param {
  * @brief 
  * Default value of j2string_st->ensure. 
  */
-#define J2_STRING_ENSURE_HEXSPEAK   0xDEAFC0DE
+#define J2_STRING_ENSURE_HEXSPEAK   0xDEAFC0DEULL
 
 /**
  * @brief 
@@ -331,7 +331,7 @@ typedef struct j2string_param {
  * give a pointer to the structure otherwise NULL.
  */
 #define J2_STRING_REACH_FOR_STRUCT(p)                                          \
-((struct j2string_st *)(*((long*)( (uint8_t*)p - sizeof(long)))                \
+((struct j2string_st *)(*((size_t*)( (uint8_t*)p - sizeof(size_t)))            \
 == J2_STRING_ENSURE_HEXSPEAK ?                                                 \
         (struct j2string_st *)( ((uint8_t*)p) -                                \
         sizeof(struct j2string_st) )                                           \

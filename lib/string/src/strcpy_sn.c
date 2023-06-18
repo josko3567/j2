@@ -298,6 +298,8 @@ j2string_strcpy_sn(
  *      amount of bytes that were written to the strings.
  * 
  */
+  
+// #ifdef __linux__
 inline
 size_t
 j2string_utf8_strcpy_sn(
@@ -613,6 +615,117 @@ ret_success:
         return ch;
 
 }
+// #else
+// inline
+// size_t
+// j2string_utf8_strcpy_sn(
+        // char * __restrict dst,
+        // const char * __restrict src,
+        // size_t max,
+        // size_t * bytelen )
+// {
+
+// #ifdef __J2_DEV__
+        // if(!dst){
+                // errno = EINVAL;
+                // viwerr(VIWERR_PUSH, &(viwerr_package){
+                        // .code    = EINVAL,
+                        // .name    = (char*)"j2err: Invalid parameter...",
+                        // .message = (char*)
+                                   // "j2string_strlen_sn() / j2.string.clen()"
+                                   // " parameter \"dst\" is a NULL ptr.",
+                        // .group   = (char*)"j2"
+                // });
+                // return 0;
+        // }
+        // if(!src){
+                // errno = EINVAL;
+                // viwerr(VIWERR_PUSH, &(viwerr_package){
+                        // .code    = EINVAL,
+                        // .name    = (char*)"j2err: Invalid parameter...",
+                        // .message = (char*)
+                                   // "j2string_strlen_sn() / j2.string.clen()"
+                                   // " parameter \"src\" is a NULL ptr.",
+                        // .group   = (char*)"j2"
+                // });
+                // return 0;
+        // } 
+        // if(max < 1) {
+                // errno = EINVAL;
+                // viwerr(VIWERR_PUSH, &(viwerr_package){
+                        // .code    = EINVAL,
+                        // .name    = (char*)"j2err: Invalid parameter...",
+                        // .message = (char*)
+                                   // "j2string_strlen_sn() / j2.string.clen()"
+                                   // " parameter \"max\" is less than 1.",
+                        // .group   = (char*)"j2"
+                // });
+                // return 0;
+        // }
+// #else
+        // if(max < 1) return 0;
+// #endif
+	// register size_t  
+                // bytes = 0,
+                // ch = 0;
+		
+	// while(1) {
+		// if(bytes == max-1) {
+			// dst[bytes] = '\0';
+			// bytes++;
+			// break;
+		// }
+		// if(src[bytes] == '\0') {
+			// dst[bytes] = '\0';
+			// bytes++;
+			// break;
+		// }
+		// if(!is_utf8_payload(src[bytes])) ch++;
+		// dst[bytes] = src[bytes];
+		// bytes++;
+	// }
+	
+	// int cnt = 0;
+	// for(int64_t k = (int64_t)bytes-1; k >= 0; k--) {
+
+                // / First '\0'.
+                // if(dst[k] == 0) continue;
+
+                // / Detect if we start of in a UTF-8 byte.
+                // / Counts the number of UTF-8 bytes and afterwards
+                // / when we end up on a starting byte we will
+                // / see if the byte is fully written or not.
+                // if(!is_utf8_payload(dst[k])) {
+                        // cnt++;
+                        // continue;
+                // }
+
+                // / If the amount of bytes the UTF-8 uses isn't the
+                // / the amount is_utf8_head_w_type returns,
+                // / we remove those bytes and update the values
+                // / acordingly.
+                // / This also catches lone UTF-8 starting bytes.
+                // if(is_utf8_head_w_type(dst[k]) != cnt) {
+
+                        // dst[k] = '\0';
+                        // bytes -= cnt+1;
+                        // ch--; 
+
+                // }
+
+                // break;
+		
+        // }
+	
+        // if(bytelen) (*bytelen) = bytes;
+        // return ch;
+	
+// }
+
+// #endif
+
+
+
 
 /**
  * @fn @c j2string_utf8_nhbc_strcpy_sn(2)

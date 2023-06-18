@@ -1,16 +1,27 @@
 #define VIWERR_SUBSCRIPTION_ERRNO
 #include "../j2.h"
-#include "../../viwerr/viwerr.h"
+#include "../ext/viwerr/viwerr.h"
 // #include "lib/utf8.h"
 #include <errno.h>
 #include <stdio.h>
-
-#define utf8_is_char(v)\
-        ((v>>6) == 2)
-
+#ifdef _WIN32
+#include <Windows.h>
+#include <locale.h>
+#endif
 int main() {
 
-        j2string stringy = j2.string.new.st("ššššš");
+#ifdef _WIN32
+	setlocale(LC_ALL, "UTF-8");
+	SetConsoleOutputCP(CP_UTF8);
+#endif
+
+        j2string stringy = j2.string.create.st("🍌👍");
+        printf("[%d]%s\n", J2_STRING_INFO(stringy)->length, stringy);
+	// printf(stringy);
+	setlocale(LC_ALL, "UTF-8");
+	SetConsoleOutputCP(CP_UTF8);
+	// setvbuf(stdout, nullptr, _IOFBF, 1000);
+	// printf("%s", stringy);
         int a = j2.string.noutf8.ccpy(&stringy, "šššš");
         j2.string.noutf8.ccat(&stringy, "🍌👍");
 
@@ -24,7 +35,7 @@ int main() {
                 .padding = 100
         });
         j2.string.ccat(&strog, " Cumi joši!");
-        j2string str1 = j2.string.new.st("🏅🌖🏆🌖🏅");
+        j2string str1 = j2.string.create.st("🏅🌖🏆🌖🏅");
         struct j2string_st * info  = J2_STRING_INFO(str1);
         printf("[%s], length: %d, filled: %d\n", str1, info->length, info->filled);
         info = J2_STRING_INFO(strog);
@@ -38,6 +49,7 @@ int main() {
                         package != NULL;package = viwerr(VIWERR_PRINT, NULL));
                 
         }
+	// printf("Hello world!");
         return 0;
 
 }
